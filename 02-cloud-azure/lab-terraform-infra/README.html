@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Lab&colon; Terraform Azure Infrastructure</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<h1 id="lab-terraform-azure-infrastructure">Lab: Terraform Azure Infrastructure</h1>
+<h2 id="objectives">Objectives</h2>
+<ul>
+<li>Provision a complete Azure environment with Terraform</li>
+<li>Use remote state (Azure Storage) for team collaboration</li>
+<li>Organize into reusable modules</li>
+</ul>
+<h2 id="tasks">Tasks</h2>
+<ul class="contains-task-list">
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> Create Terraform project structure: <code>main.tf</code>, <code>variables.tf</code>, <code>outputs.tf</code></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> Configure Azure provider and remote state backend (Azure Storage)</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> Create modules: <code>networking</code>, <code>aks</code>, <code>acr</code>, <code>servicebus</code>, <code>keyvault</code>, <code>cosmosdb</code></li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> Provision: Resource Group, VNet, AKS, ACR, Service Bus, Key Vault, CosmosDB</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> Configure managed identity and role assignments in Terraform</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> Use Terraform workspaces for dev/staging/prod environments</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> Add <code>terraform plan</code> as a GitHub Actions PR check</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> Document: how to run locally, how to destroy</li>
+</ul>
+<h2 id="expected-output">Expected Output</h2>
+<p>Terraform code that provisions the full environment in one <code>terraform apply</code>. State in Azure Storage. Module-based structure.</p>
+<h2 id="key-concepts-practiced">Key Concepts Practiced</h2>
+<p><code>Terraform</code> · <code>Remote state</code> · <code>Modules</code> · <code>Workspaces</code> · <code>Azure provider</code> · <code>RBAC in Terraform</code></p>
+<h2 id="status">Status</h2>
+<ul class="contains-task-list">
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> Completed</li>
+<li class="task-list-item enabled"><input class="task-list-item-checkbox"type="checkbox"> PR description written → <code>src/05-technical-english/pr-descriptions/</code></li>
+</ul>
+
+            
+            
+        </body>
+        </html>
