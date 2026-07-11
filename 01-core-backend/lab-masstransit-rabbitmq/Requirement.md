@@ -1,1 +1,0 @@
-﻿# lab-masstransit-rabbitmq
