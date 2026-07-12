@@ -26,3 +26,7 @@ TestResults.xml
 .claude/settings.local.json
 technical-interview/scripts/
 interview-app/scripts/
+
+### .NET build output (any project, any depth) ###
+**/bin/
+**/obj/
